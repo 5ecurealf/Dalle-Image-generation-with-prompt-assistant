@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,20 @@ export function App() {
   const [theme, setTheme] = useState("");
   const [userInput, setUserInput] = useState("");
   const [refinedPrompt, setRefinedPrompt] = useState("");
+  const [threadId, setThreadId] = useState("");
+
+  // create a new threadID when chat component created
+  useEffect(() => {
+    const createThread = async () => {
+      const res = await fetch(`/api/assistants/threads`, {
+        method: "POST",
+      });
+      const data = await res.json();
+      console.log("data.threadId", data.threadId);
+      setThreadId(data.threadId);
+    };
+    createThread();
+  }, []);
 
   const handleRefine = () => {
     const themeText = theme ? `In the style of ${theme}, ` : "";
