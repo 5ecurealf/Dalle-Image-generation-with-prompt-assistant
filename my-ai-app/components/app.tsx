@@ -61,6 +61,20 @@ export function App() {
     // setRefinedPrompt();
   };
 
+  const handleImageGeneration = async () => {
+    const response = await fetch("api/images", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: refinedPrompt,
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-background">
       <div className="max-w-md w-full space-y-4">
@@ -103,7 +117,10 @@ export function App() {
           >
             Refine
           </Button>
-          <Button className="rounded-md px-4 py-2 text-sm font-medium">
+          <Button
+            className="rounded-md px-4 py-2 text-sm font-medium"
+            onClick={handleImageGeneration}
+          >
             Generate
           </Button>
         </div>
