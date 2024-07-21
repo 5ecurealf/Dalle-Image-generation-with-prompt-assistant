@@ -11,6 +11,8 @@ export function App() {
   const [userInput, setUserInput] = useState("");
   const [refinedPrompt, setRefinedPrompt] = useState("");
   const [threadId, setThreadId] = useState("");
+  const [imageIsLoading, setImageIsLoading] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
 
   // create a new threadID when chat component created
   useEffect(() => {
@@ -62,6 +64,7 @@ export function App() {
   };
 
   const handleImageGeneration = async () => {
+    setImageIsLoading(true);
     const response = await fetch("api/images", {
       method: "POST",
       headers: {
@@ -73,6 +76,8 @@ export function App() {
     });
     const data = await response.json();
     console.log(data);
+    setImage(data);
+    setImageIsLoading(false);
   };
 
   return (
@@ -130,13 +135,17 @@ export function App() {
           <p className="text-base font-medium">{refinedPrompt}</p>
         </div>
         <div className="bg-card rounded-md overflow-hidden">
-          <img
-            src="/placeholder.svg"
-            alt="Generated image"
-            width={600}
-            height={400}
-            className="w-full h-auto object-cover"
-          />
+          {imageIsLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+            </div>
+          ) : image ? (
+            <img
+              src={`data:image/jpeg;base64,${image}`}
+              alt="Generated content"
+              className="w-full"
+            />
+          ) : null}
         </div>
       </div>
     </div>
