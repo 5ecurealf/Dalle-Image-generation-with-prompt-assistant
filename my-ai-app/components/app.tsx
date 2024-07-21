@@ -25,6 +25,30 @@ export function App() {
     createThread();
   }, []);
 
+  const sendMessage = async (text: string) => {
+    const response = await fetch(
+      `/api/assistants/threads/${threadId}/messages`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          content: text,
+        }),
+      }
+    );
+    const data = await response.json();
+    console.log("response from assistant", response);
+    console.log("response data", data);
+
+    console.log(
+      "last message from the assistant",
+      data[data.length - 1].content
+    );
+
+    // const stream = AssistantStream.fromReadableStream(response.body);
+    // handleReadableStream(stream);
+    setRefinedPrompt(data[data.length - 1].content);
+  };
+
   const handleRefine = () => {
     const themeText = theme ? `In the style of ${theme}, ` : "";
 
@@ -32,6 +56,7 @@ export function App() {
 
     const promptToSendToAssistant = `${themeText}generate an image that fits the description: ${userInput}`;
     console.log(promptToSendToAssistant);
+    sendMessage(promptToSendToAssistant);
     // Set this when we get feedback from the assistant
     // setRefinedPrompt();
   };
