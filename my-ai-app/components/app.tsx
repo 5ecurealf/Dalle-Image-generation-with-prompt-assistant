@@ -81,8 +81,8 @@ export function App() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-background">
-      <div className="max-w-md w-full space-y-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background overflow-auto">
+      <div className="max-w-md w-full space-y-4 p-4">
         <div className="flex items-center space-x-2">
           {/* Radio Group */}
           <RadioGroup value={theme} onValueChange={setTheme}>
